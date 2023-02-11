@@ -104,6 +104,13 @@ void VisualiserPluginAudioProcessor::prepareToPlay (double sampleRate, int sampl
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    juce::dsp::ProcessSpec spec;
+
+    //osc.initialise([](float x) { return std::sin(x); });
+
+    //spec.numChannels = getTotalNumOutputChannels();
+    //osc.prepare(spec);
+    //osc.setFrequency(50);
 }
 
 void VisualiserPluginAudioProcessor::releaseResources()
@@ -153,6 +160,8 @@ void VisualiserPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+    juce::dsp::AudioBlock<float> block(buffer);
+
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
     // Make sure to reset the state if your inner loop is processing
@@ -165,6 +174,12 @@ void VisualiserPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
 
         // ..do something to the data...
     }
+
+
+    //buffer.clear();
+
+    //juce::dsp::ProcessContextReplacing<float> stereoContext(block);
+    //osc.process(stereoContext);
 
 
     longWaveViewer.pushBuffer(buffer);
