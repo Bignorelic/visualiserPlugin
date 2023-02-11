@@ -16,6 +16,7 @@ VisualiserPluginAudioProcessorEditor::VisualiserPluginAudioProcessorEditor (Visu
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (400, 300);
+    setSize (1280, 400);
 }
 
 VisualiserPluginAudioProcessorEditor::~VisualiserPluginAudioProcessorEditor()
@@ -26,15 +27,33 @@ VisualiserPluginAudioProcessorEditor::~VisualiserPluginAudioProcessorEditor()
 void VisualiserPluginAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    //g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    
+    using namespace juce;
 
-    g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    g.fillAll(Colours::black);
+
+    auto bounds = getLocalBounds();
+    auto longWaveformArea = bounds.removeFromBottom(100);
+    auto shortWaveformArea = bounds.removeFromRight(500);
+    auto spectrumArea = bounds;
+
+    g.setColour(Colours::red);
+    g.drawRect(longWaveformArea, 1.f);
+    g.drawRect(shortWaveformArea, 1.f);
+    g.drawRect(spectrumArea, 1.f);
 }
 
 void VisualiserPluginAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
+
+    auto bounds = getLocalBounds();
+    auto longWaveformArea = bounds.removeFromBottom(100);
+    auto shortWaveformArea = bounds.removeFromRight(500);
+    auto spectrumAre = bounds;
+
+    audioProcessor.longWaveViewer.setBounds(longWaveformArea);
+    audioProcessor.shortWaveViewer.setBounds(shortWaveformArea);
 }
