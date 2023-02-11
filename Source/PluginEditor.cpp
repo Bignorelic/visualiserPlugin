@@ -15,7 +15,12 @@ VisualiserPluginAudioProcessorEditor::VisualiserPluginAudioProcessorEditor (Visu
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (400, 300);
+
+    addAndMakeVisible(audioProcessor.longWaveViewer);
+    addAndMakeVisible(audioProcessor.shortWaveViewer);
+    audioProcessor.longWaveViewer.setColours(juce::Colours::black, juce::Colours::white);
+    audioProcessor.shortWaveViewer.setColours(juce::Colours::black, juce::Colours::white);
+
     setSize (1280, 400);
 }
 
@@ -42,6 +47,9 @@ void VisualiserPluginAudioProcessorEditor::paint (juce::Graphics& g)
     g.drawRect(longWaveformArea, 1.f);
     g.drawRect(shortWaveformArea, 1.f);
     g.drawRect(spectrumArea, 1.f);
+
+   // Path p;
+   //audioProcessor.longWaveViewer.getChannelAsPath(p, ,16, )
 }
 
 void VisualiserPluginAudioProcessorEditor::resized()

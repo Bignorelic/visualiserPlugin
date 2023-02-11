@@ -12,16 +12,25 @@
 //==============================================================================
 VisualiserPluginAudioProcessor::VisualiserPluginAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                      #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                     #endif
-                       )
+    : AudioProcessor(BusesProperties()
+#if ! JucePlugin_IsMidiEffect
+#if ! JucePlugin_IsSynth
+        .withInput("Input", juce::AudioChannelSet::stereo(), true)
+#endif
+        .withOutput("Output", juce::AudioChannelSet::stereo(), true)
+#endif
+    ),
+    longWaveViewer(2),
+    shortWaveViewer(2)
 #endif
 {
+    longWaveViewer.setRepaintRate(60);
+    longWaveViewer.setBufferSize(1024);
+    longWaveViewer.setSamplesPerBlock(16);
+
+    shortWaveViewer.setRepaintRate(60);
+    shortWaveViewer.setBufferSize(1024);
+    shortWaveViewer.setSamplesPerBlock(16);
 }
 
 VisualiserPluginAudioProcessor::~VisualiserPluginAudioProcessor()
@@ -156,6 +165,10 @@ void VisualiserPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
 
         // ..do something to the data...
     }
+
+
+    longWaveViewer.pushBuffer(buffer);
+    shortWaveViewer.pushBuffer(buffer);
 }
 
 //==============================================================================
